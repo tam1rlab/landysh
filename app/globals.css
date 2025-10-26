@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Тема по умолчанию */
+:root {
+  --bg: #ffffff;
+  --bg-subtle: #f7f9fc;
+  --text: #1a1a1a;
+  --primary: #0A7E8C;
+  --primary-600: #086876;
+  --primary-100: #e6f7f9;
+  --accent: #00b7c6;
+  --border: #e6ecf4;
+  --card: #ffffff;
+  --ring: #8fd2da;
+}
+
+/* Премиальная тема Big Pharma */
+html[data-theme="bigpharma"] {
+  --bg: #ffffff;
+  --bg-subtle: #f7f9fc;
+  --text: #1a1a1a;
+  --primary: #0052cc;
+  --primary-600: #0043a3;
+  --primary-100: #e6ecf9;
+  --accent: #00a3ff;
+  --border: #e6ecf4;
+  --card: #ffffff;
+  --ring: #99c2ff;
+}
+
+body {
+  @apply bg-[var(--bg)] text-[var(--text)];
+}
+
+/* Наши классы — в слой components, чтобы @apply работал стабильно в v3 */
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 font-medium shadow-sm transition;
+    background: var(--primary);
+    color: white;
+  }
+  .btn:hover { background: var(--primary-600); }
+
+  .card {
+    @apply rounded-2xl border shadow-soft;
+    background: var(--card);
+    border-color: var(--border);
+  }
+
+  .input {
+    @apply rounded-xl border px-3 py-2 outline-none transition;
+    border-color: var(--border);
+  }
+  .input:focus { box-shadow: 0 0 0 3px var(--ring); }
+}
