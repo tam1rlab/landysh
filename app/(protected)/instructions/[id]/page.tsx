@@ -1,3 +1,5 @@
+import Image from "next/image";
+import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 
@@ -57,8 +59,12 @@ export default async function InstructionViewPage({ params }: { params: { id: st
             <span className="font-bold">Pharmacy Training — Инструкция</span>
           </div>
           <nav className="flex items-center gap-3 text-sm">
-            <a className="rounded-lg border px-3 py-1 hover:opacity-80" href="/instructions">📚 Список</a>
-            <a className="rounded-lg border px-3 py-1 hover:opacity-80" href="/dashboard">🏠 Главная</a>
+            <Link className="rounded-lg border px-3 py-1 hover:opacity-80" href="/instructions">
+              📚 Список
+            </Link>
+            <Link className="rounded-lg border px-3 py-1 hover:opacity-80" href="/dashboard">
+              🏠 Главная
+            </Link>
           </nav>
         </div>
       </header>
@@ -104,11 +110,15 @@ export default async function InstructionViewPage({ params }: { params: { id: st
               <div className="text-sm opacity-70 mb-2">Прикреплённый файл</div>
 
               {isImage(item.fileUrl) ? (
-                <img
-                  src={item.fileUrl}
-                  alt="attached"
-                  className="max-h-[60vh] w-full rounded-xl border object-contain"
-                />
+                <div className="relative h-[60vh] w-full overflow-hidden rounded-xl border">
+                  <Image
+                    src={item.fileUrl}
+                    alt="attached"
+                    fill
+                    className="object-contain"
+                    sizes="(max-width: 768px) 100vw, 768px"
+                  />
+                </div>
               ) : isPdf(item.fileUrl) ? (
                 <object
                   data={item.fileUrl}
