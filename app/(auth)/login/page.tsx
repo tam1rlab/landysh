@@ -2,6 +2,16 @@
 
 import { useEffect, useState } from "react";
 
+type Role = "admin" | "user";
+type User = {
+  id: number;
+  username: string;
+  role: Role;
+};
+
+type MeResponse = { user: User | null };
+type LoginResponse = { success?: boolean; error?: string };
+
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -14,7 +24,7 @@ export default function LoginPage() {
       try {
         const res = await fetch("/api/me", { cache: "no-store" });
         if (res.ok) {
-          const data = await res.json();
+          const data: MeResponse = await res.json();
           if (data?.user) {
             window.location.href = "/dashboard";
           }
@@ -35,9 +45,11 @@ export default function LoginPage() {
         body: JSON.stringify({ username, password }),
       });
 
-      const data = await res.json().catch(() => ({}));
+      const data: LoginResponse = await res
+        .json()
+        .catch(() => ({ success: false }));
       if (!res.ok) {
-        setError((data as any)?.error || "Ошибка входа");
+        setError(data.error || "Ошибка входа");
         setLoading(false);
         return;
       }

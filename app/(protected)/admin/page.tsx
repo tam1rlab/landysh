@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { saveUploadedFile } from "@/lib/upload";
@@ -68,8 +69,12 @@ export default async function AdminPage() {
             <span className="font-bold">Pharmacy Training — Админ</span>
           </div>
           <nav className="flex items-center gap-3 text-sm">
-            <a className="rounded-lg border px-3 py-1 hover:opacity-80" href="/admin/users">👤 Пользователи</a>
-            <a className="rounded-lg border px-3 py-1 hover:opacity-80" href="/instructions">📚 Инструкции</a>
+            <Link className="rounded-lg border px-3 py-1 hover:opacity-80" href="/admin/users">
+              👤 Пользователи
+            </Link>
+            <Link className="rounded-lg border px-3 py-1 hover:opacity-80" href="/instructions">
+              📚 Инструкции
+            </Link>
           </nav>
         </div>
       </header>
@@ -140,9 +145,9 @@ export default async function AdminPage() {
                   style={{ borderColor: "var(--border)", background: "var(--card)" }}
                 >
                   <div className="min-w-0">
-                    <a className="font-medium hover:underline break-words" href={`/instructions/${it.id}`}>
+                    <Link className="font-medium hover:underline break-words" href={`/instructions/${it.id}`}>
                       {it.title}
-                    </a>
+                    </Link>
 
                     {it.content ? (
                       <p className="mt-1 text-sm opacity-80 break-words">
@@ -163,12 +168,12 @@ export default async function AdminPage() {
                     ) : null}
 
                     <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
-                      <a
+                      <Link
                         className="rounded-lg border px-3 py-1 hover:opacity-80"
                         href={`/admin/instructions/${it.id}/edit`}
                       >
                         ✏️ Редактировать
-                      </a>
+                      </Link>
                     </div>
                   </div>
 

@@ -1,15 +1,32 @@
 "use client";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
+type Role = "admin" | "user";
+type User = {
+  id: number;
+  username: string;
+  role: Role;
+};
+type MeResponse = { user: User | null };
+
 export default function DashboardPage() {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     (async () => {
-      const res = await fetch("/api/me");
-      const data = await res.json();
-      setUser(data.user);
-      if (!data.user) window.location.href = "/login";
+      try {
+        const res = await fetch("/api/me");
+        if (!res.ok) {
+          window.location.href = "/login";
+          return;
+        }
+        const data: MeResponse = await res.json();
+        setUser(data.user);
+        if (!data.user) window.location.href = "/login";
+      } catch {
+        window.location.href = "/login";
+      }
     })();
   }, []);
 
@@ -55,7 +72,7 @@ export default function DashboardPage() {
         </div>
 
         <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
-          <a
+          <Link
             className="card p-5 shadow-soft hover:shadow-md transition"
             href="/instructions"
           >
@@ -66,11 +83,11 @@ export default function DashboardPage() {
             <div className="mt-4">
               <span className="btn">Открыть</span>
             </div>
-          </a>
+          </Link>
 
           {/* Только для админа — логику не меняем, только стиль */}
           {user.role === "admin" && (
-            <a
+            <Link
               className="card p-5 shadow-soft hover:shadow-md transition"
               href="/admin"
             >
@@ -81,7 +98,7 @@ export default function DashboardPage() {
               <div className="mt-4">
                 <span className="btn">Перейти</span>
               </div>
-            </a>
+            </Link>
           )}
 
           <div className="card p-5 shadow-soft">
