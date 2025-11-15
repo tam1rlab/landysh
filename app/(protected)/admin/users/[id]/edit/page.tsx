@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { notFound, redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
@@ -16,12 +17,15 @@ async function updateUser(formData: FormData) {
 
   if (!Number.isFinite(id) || !username) return;
 
-  const data: any = { username, role };
+  const updateData: { username: string; role: Role; password?: string } = {
+    username,
+    role,
+  };
   if (newPassword) {
-    data.password = await bcrypt.hash(newPassword, 10);
+    updateData.password = await bcrypt.hash(newPassword, 10);
   }
 
-  await prisma.user.update({ where: { id }, data });
+  await prisma.user.update({ where: { id }, data: updateData });
 
   revalidatePath("/admin/users");
   redirect("/admin/users");
@@ -77,7 +81,9 @@ export default async function EditUserPage({ params }: Props) {
             <button className="rounded-md bg-blue-600 text-white px-4 py-2 hover:bg-blue-700">
               Сохранить
             </button>
-            <a href="/admin/users" className="px-4 py-2 rounded-md border">Отмена</a>
+            <Link href="/admin/users" className="px-4 py-2 rounded-md border">
+              Отмена
+            </Link>
           </div>
         </form>
       </div>
